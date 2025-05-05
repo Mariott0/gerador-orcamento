@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Orçamento Profissional</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #eef2f7;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .dark-mode {
+            background: #1e1e1e;
+            color: #ddd;
+        }
+
+        h1,
+        h2 {
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .dark-mode .container {
+            background: #2c2c2c;
+            color: #ccc;
+        }
+
+        input,
+        button,
+        textarea {
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 1em;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .produto {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .produto input {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .remover {
+            background: #dc3545;
+            width: auto;
+        }
+
+        .remover:hover {
+            background: #a71d2a;
+        }
+
+        .botoes {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .copiar-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            position: relative;
+        }
+
+        .copiar-container textarea {
+            border: none;
+            resize: none;
+            flex: 1;
+            background: transparent;
+            font-size: 1em;
+            color: inherit;
+        }
+
+        .copiar-btn {
+            width: 40px;
+            height: 40px;
+            background: #4f8bff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .copiar-btn svg {
+            fill: #fff;
+        }
+
+        .copiado {
+            position: absolute;
+            top: -35px;
+            background: #4f8bff;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            display: none;
+        }
+
+        .copiar-btn.copiado-active .copiado {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Gerador de Orçamento 📦</h1>
+        <button onclick="toggleDarkMode()">
+            <span id="modo-icone">🌙</span></button>
+        <input type="text" id="titulo"
+            placeholder="Título do orçamento (ex: Orçamento - Repetidores de Sinal Wi-Fi 📶)">
+
+        <div id="produtos"></div>
+
+        <div class="botoes">
+            <button onclick="adicionarProduto()">Adicionar Produto</button>
+            <button onclick="gerarOrcamento()">Gerar Orçamento</button>
+        </div>
+
+        <h2>Relatório para Cliente</h2>
+        <div class="copiar-container">
+            <textarea id="orcamento" rows="6" readonly></textarea>
+            <div class="copiar-btn" onclick="copiarTexto('orcamento', this)">
+                <div class="copiado">Copiado</div>
+                <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path
+                        d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
+                </svg>
+            </div>
+        </div>
+
+        <h2>Relatório de Controle Interno</h2>
+        <div class="copiar-container">
+            <textarea id="controle" rows="6" readonly></textarea>
+            <div class="copiar-btn" onclick="copiarTexto('controle', this)">
+                <div class="copiado">Copiado</div>
+                <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path
+                        d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function adicionarProduto() {
+            const div = document.createElement('div');
+            div.className = 'produto';
+            div.innerHTML = `
+        <input type="text" placeholder="Nome do produto" class="nome">
+        <input type="number" placeholder="Valor do fornecedor (R$)" class="valor">
+        <button class="remover" onclick="removerProduto(this)">Remover</button>
+      `;
+            document.getElementById('produtos').appendChild(div);
+        }
+
+        function removerProduto(botao) {
+            botao.parentElement.remove();
+            gerarOrcamento();
+        }
+
+        function gerarOrcamento() {
+            const titulo = document.getElementById('titulo').value;
+            const nomes = document.querySelectorAll('.nome');
+            const valores = document.querySelectorAll('.valor');
+
+            let textoCliente = `📦 ${titulo} 📶\n\n`;
+            let textoControle = `Relatório de Controle:\n\n`;
+
+            nomes.forEach((nome, index) => {
+                const valorFornecedor = parseFloat(valores[index].value);
+                if (!nome.value || isNaN(valorFornecedor)) return;
+
+                const custoFinal = valorFornecedor * 1.20;
+                const precoVenda = custoFinal * 1.30;
+                const taxa = custoFinal - valorFornecedor;
+                const lucro = precoVenda - custoFinal;
+
+                textoCliente += `${index + 1}️⃣ ${nome.value}\n💰 R$ ${precoVenda.toFixed(2)}\n\n`;
+
+                textoControle += `${index + 1}️⃣ ${nome.value}\n`;
+                textoControle += `- Fornecedor: R$ ${valorFornecedor.toFixed(2)}\n`;
+                textoControle += `- Custo Final (com taxa 20%): R$ ${custoFinal.toFixed(2)}\n`;
+                textoControle += `- Taxa: R$ ${taxa.toFixed(2)}\n`;
+                textoControle += `- Preço de Venda: R$ ${precoVenda.toFixed(2)}\n`;
+                textoControle += `- Lucro: R$ ${lucro.toFixed(2)}\n\n`;
+            });
+
+            document.getElementById('orcamento').value = textoCliente;
+            document.getElementById('controle').value = textoControle;
+        }
+
+        function copiarTexto(id, btn) {
+            const texto = document.getElementById(id);
+            navigator.clipboard.writeText(texto.value);
+            btn.classList.add('copiado-active');
+            setTimeout(() => btn.classList.remove('copiado-active'), 1500);
+        }
+
+        function toggleDarkMode() {
+            const body = document.body;
+            const icon = document.getElementById('modo-icone');
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                icon.textContent = '☀️';
+            } else {
+                icon.textContent = '🌙';
+            }
+        }
+    </script>
+</body>
+
+</html>
